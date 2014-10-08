@@ -5,6 +5,6 @@
 FROM ubuntu:14.04
 
 ADD . /opt/cloudfleet/setup
-RUN /opt/cloudfleet/scripts/install.sh
+RUN /opt/cloudfleet/setup/scripts/install.sh
 
-CMD /opt/cloudfleet/scripts/start.sh
+CMD /opt/cloudfleet/setup/scripts/start.sh
