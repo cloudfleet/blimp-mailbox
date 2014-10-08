@@ -8,3 +8,6 @@ ADD . /opt/cloudfleet/setup
 RUN /opt/cloudfleet/setup/scripts/install.sh
 
 CMD /opt/cloudfleet/setup/scripts/start.sh
+
+EXPOSE 3000
+VOLUME /opt/cloudfleet/maildir
