@@ -10,4 +10,4 @@ RUN /opt/cloudfleet/setup/scripts/install.sh
 CMD /opt/cloudfleet/setup/scripts/start.sh
 
 EXPOSE 3000
-VOLUME /opt/cloudfleet/maildir
+VOLUME /opt/cloudfleet/common/maildir
