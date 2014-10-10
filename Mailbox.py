@@ -1,5 +1,5 @@
 from flask import Flask, request
-import mailbox, email
+import mailbox, email, os
 import traceback
 
 
@@ -14,10 +14,17 @@ def post_message(recipient):
         real_recipient = recipient
 
         if not real_recipient in mailboxes:
-            mailboxes[real_recipient] = mailbox.Maildir("/opt/cloudfleet/maildir/%s" % real_recipient, factory=None, create=True)
+            directory = "/opt/cloudfleet/maildir/%s" % real_recipient
+            for subdir in ["cur", "tmp", "new"]:
+                subdir_path = "%s/%s" % (directory, subdir)
+                if not os.path.exists(subdir_path):
+                    os.makedirs(subdir_path)
+
+            mailboxes[real_recipient] = mailbox.Maildir(directory, factory=None)
 
         new_message = email.message_from_string(request.data)
-        mailboxes[real_recipient].add(new_message)
+        recipient_mailbox = mailboxes[real_recipient]
+        recipient_mailbox.add(new_message)
     except:
         print traceback.format_exc()
 
