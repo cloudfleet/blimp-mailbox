@@ -14,7 +14,7 @@ def post_message(recipient):
         real_recipient = recipient
 
         if not real_recipient in mailboxes:
-            directory = "/opt/cloudfleet/maildir/%s/.inbox" % real_recipient
+            directory = "/opt/cloudfleet/maildir/%s" % real_recipient
             for subdir in ["cur", "tmp", "new"]:
                 subdir_path = "%s/%s" % (directory, subdir)
                 if not os.path.exists(subdir_path):
