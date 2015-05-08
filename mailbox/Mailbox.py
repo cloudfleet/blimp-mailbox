@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, current_app
 import mailbox, email, os, json
 import traceback
 
@@ -25,7 +25,11 @@ def resolve_real_recipient(recipient, users):
 @app.route('/raw/<recipient>', methods=['POST'])
 def post_message(recipient):
     try:
+        current_app.logger.debug("receiving mail for %s" % recipient)
         real_recipient = resolve_real_recipient(recipient, load_users())
+        current_app.logger.debug("delivering mail to %s" % real_recipient)
+
+
 
         if not real_recipient:
             abort(404)
@@ -43,10 +47,10 @@ def post_message(recipient):
         recipient_mailbox = mailboxes[real_recipient]
         recipient_mailbox.add(new_message)
     except:
-        print traceback.format_exc()
+        current_app.logger.error(traceback.format_exc())
 
     return "success!"
 
 
 if __name__ == '__main__':
-    app.run(port=3000, host="0.0.0.0")
+    app.run(port=3000, host="0.0.0.0", debug="True")
