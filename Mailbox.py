@@ -1,17 +1,31 @@
 from flask import Flask, request
-import mailbox, email, os
+import mailbox, email, os, json
 import traceback
 
 
 app = Flask(__name__)
 mailboxes = {}
 
+def resolve_real_recipient(recipient):
+    json_data = open('/opt/cloudfleet/users/users.json')
+    users = json.load(json_data)["users"].items()
+
+    for username, userdata in users:
+        if username.lower() == recipient.lower():
+            return username
+        else:
+            if userdata["aliases"] and recipient.lower() in [alias.lower() for alias in userdata["aliases"]]
+                return username
+    return None
+
 
 @app.route('/raw/<recipient>', methods=['POST'])
 def post_message(recipient):
     try:
-        # TODO resolve alias
         real_recipient = recipient
+
+        if not real_recipient:
+            abort(404)
 
         if not real_recipient in mailboxes:
             directory = "/opt/cloudfleet/maildir/%s" % real_recipient
