@@ -8,7 +8,7 @@ mailboxes = {}
 
 def load_users():
     json_data = open('/opt/cloudfleet/users/users.json')
-    return json.load(json_data)["users"].items()
+    return json.load(json_data)["users"]
 
 
 def resolve_real_recipient(recipient, users):
