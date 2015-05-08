@@ -4,8 +4,6 @@
 
 FROM ubuntu:14.04
 
-ADD requirements.txt /opt/cloudfleet/app/requirements.txt
-
 RUN (apt-get update -y && apt-get install python-flask -y)
 
 CMD ["python" "/opt/cloudfleet/app/mailbox/Mailbox.py"]
