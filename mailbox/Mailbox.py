@@ -6,15 +6,18 @@ import traceback
 app = Flask(__name__)
 mailboxes = {}
 
-def resolve_real_recipient(recipient):
+def load_users():
     json_data = open('/opt/cloudfleet/users/users.json')
-    users = json.load(json_data)["users"].items()
+    return json.load(json_data)["users"].items()
 
-    for username, userdata in users:
+
+def resolve_real_recipient(recipient, users):
+
+    for username, userdata in users.items():
         if username.lower() == recipient.lower():
             return username
         else:
-            if userdata["aliases"] and recipient.lower() in [alias.lower() for alias in userdata["aliases"]]
+            if userdata["aliases"] and recipient.lower() in [alias.lower() for alias in userdata["aliases"]]:
                 return username
     return None
 
@@ -22,7 +25,7 @@ def resolve_real_recipient(recipient):
 @app.route('/raw/<recipient>', methods=['POST'])
 def post_message(recipient):
     try:
-        real_recipient = recipient
+        real_recipient = resolve_real_recipient(recipient, load_users())
 
         if not real_recipient:
             abort(404)

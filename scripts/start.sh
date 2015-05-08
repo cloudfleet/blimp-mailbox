@@ -1,2 +1,2 @@
 #!/bin/bash
-python /opt/cloudfleet/setup/Mailbox.py
+python /opt/cloudfleet/setup/mailbox/Mailbox.py
