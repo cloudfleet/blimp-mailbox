@@ -4,10 +4,13 @@
 
 FROM ubuntu:14.04
 
-ADD . /opt/cloudfleet/setup
-RUN /opt/cloudfleet/setup/scripts/install.sh
+ADD requirements.txt /opt/cloudfleet/app/requirements.txt
 
-CMD /opt/cloudfleet/setup/scripts/start.sh
+RUN (apt-get update -y && apt-get install python-flask -y)
+
+CMD ["python" "/opt/cloudfleet/app/mailbox/Mailbox.py"]
 
 EXPOSE 3000
-VOLUME /opt/cloudfleet/common/maildir
+VOLUME /opt/cloudfleet/common/mails
+
+ADD . /opt/cloudfleet/app
